@@ -137,5 +137,22 @@ document.addEventListener('keydown', (e) => {
 
       break
     }
+    case 'ArrowDown': {
+      if (currentState.stopped) return
+      try {
+        const newY = currentState.currentBlock.y + 1
+        drawBlockToGrid({
+          grid: currentState.grid,
+          block: { ...currentState.currentBlock, y: newY },
+        })
+        currentState.currentBlock.y = newY
+      } catch (e) {
+        //Do nothing
+      } finally {
+        updateGrid()
+      }
+
+      break
+    }
   }
 })
