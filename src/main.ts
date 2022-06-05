@@ -6,7 +6,6 @@ import { BlockState, State } from './types/state'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { getGrid } from './utils/getGrid'
 import { getRandomBlock } from './utils/getRandomBlock'
-import { mergeGrid } from './utils/mergeGrid'
 
 const getInitialBlock = (): BlockState => ({
   x: 6,
@@ -16,9 +15,9 @@ const getInitialBlock = (): BlockState => ({
 })
 
 const getInitialState = (): State => ({
-  solidGrid: getGrid(config.gridSize),
-  currentGrid: getGrid(config.gridSize),
+  grid: getGrid(config.gridSize),
   currentBlock: getInitialBlock(),
+
   clock: undefined,
   stopped: true,
   score: 0,
@@ -27,17 +26,14 @@ const getInitialState = (): State => ({
 let currentState = getInitialState()
 
 const updateGrid = () => {
-  const newCurrentGrid = drawBlockToGrid({
-    grid: getGrid(config.gridSize),
+  const playArea = document.querySelector('#grid')
+  if (!playArea) return
+
+  const displayGrid = drawBlockToGrid({
+    grid: currentState.grid,
     block: currentState.currentBlock,
   })
 
-  const displayGrid = mergeGrid(newCurrentGrid, currentState.solidGrid)
-
-  currentState.currentGrid = newCurrentGrid
-
-  const playArea = document.querySelector('#grid')
-  if (!playArea) return
   paint(playArea, displayGrid)
 }
 
@@ -46,17 +42,17 @@ const tick = () => {
     const newY = currentState.currentBlock.y + 1
 
     drawBlockToGrid({
-      grid: currentState.solidGrid,
+      grid: currentState.grid,
       block: { ...currentState.currentBlock, y: newY },
     })
 
     currentState.currentBlock.y = newY
   } catch (e) {
     // Landed
-    currentState.solidGrid = mergeGrid(
-      currentState.currentGrid,
-      currentState.solidGrid
-    )
+    currentState.grid = drawBlockToGrid({
+      grid: currentState.grid,
+      block: currentState.currentBlock,
+    })
     currentState.currentBlock = getInitialBlock()
   } finally {
     currentState.score = currentState.score + 1
@@ -97,7 +93,7 @@ document.addEventListener('keydown', (e) => {
             : currentState.currentBlock.rotation + 1
         ) as 0 | 1 | 2 | 3
         drawBlockToGrid({
-          grid: currentState.solidGrid,
+          grid: currentState.grid,
           block: { ...currentState.currentBlock, rotation: newRotation },
         })
         currentState.currentBlock.rotation = newRotation
@@ -113,7 +109,7 @@ document.addEventListener('keydown', (e) => {
       try {
         const newX = currentState.currentBlock.x - 1
         drawBlockToGrid({
-          grid: currentState.solidGrid,
+          grid: currentState.grid,
           block: { ...currentState.currentBlock, x: newX },
         })
         currentState.currentBlock.x = newX
@@ -129,7 +125,7 @@ document.addEventListener('keydown', (e) => {
       try {
         const newX = currentState.currentBlock.x + 1
         drawBlockToGrid({
-          grid: currentState.solidGrid,
+          grid: currentState.grid,
           block: { ...currentState.currentBlock, x: newX },
         })
         currentState.currentBlock.x = newX

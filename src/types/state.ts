@@ -9,8 +9,7 @@ export type BlockState = {
 }
 
 export type State = {
-  solidGrid: Grid
-  currentGrid: Grid
+  grid: Grid
   currentBlock: BlockState
 
   clock: number | undefined
