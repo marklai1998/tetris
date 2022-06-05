@@ -7,7 +7,6 @@ const config = { gridSize: { row: 20, col: 10 }, speed: 1000 }
 const getInitialState = () => ({
   solidGrid: getGrid(config.gridSize),
   currentGrid: getGrid(config.gridSize),
-  displayGrid: getGrid(config.gridSize),
   clock: undefined as number | undefined,
   stopped: true,
   score: 0,
@@ -20,7 +19,7 @@ const getInitialState = () => ({
 
 let state = getInitialState()
 
-const draw = (grid: (string | number)[][]) => {
+const paint = (grid: (string | number)[][]) => {
   const playArea = document.querySelector('#grid')
   if (!playArea) return
   playArea.innerHTML = ''
@@ -34,7 +33,7 @@ const draw = (grid: (string | number)[][]) => {
       const cellEle = document.createElement('cell')
       cellEle.textContent = String(cell)
       cellEle.id = 'R' + rowIdx + 'C' + cellIdx
-      cellEle.className = 'grid-cell'
+      cellEle.className = `grid-cell ${cell ? `gc-${cell}` : ''}`
 
       rowEle.appendChild(cellEle)
     })
@@ -48,32 +47,30 @@ const updateGrid = () => {
   const block = blocks[state.currentBlock.blockCode]
 
   block.forEach((row, rowIdx) => {
-    if (state.currentBlock.y - rowIdx >= 0) {
+    const y = state.currentBlock.y - rowIdx
+    if (y >= 0 && y < newCurrentGrid.length) {
       row.forEach((value, colIdx) => {
         if (value) {
-          newCurrentGrid[state.currentBlock.y - rowIdx][
-            state.currentBlock.x - colIdx
-          ] = state.currentBlock.blockCode
+          const x = state.currentBlock.x - colIdx
+          newCurrentGrid[y][x] = state.currentBlock.blockCode
         }
       })
     }
   })
 
-  const newDisplayGrid = getGrid(config.gridSize).map((row, rowIdx) =>
+  const displayGrid = getGrid(config.gridSize).map((row, rowIdx) =>
     row.map(
       (col, colIdx) =>
-        state.currentGrid[rowIdx][colIdx] || state.solidGrid[rowIdx][colIdx]
+        newCurrentGrid[rowIdx][colIdx] || state.solidGrid[rowIdx][colIdx]
     )
   )
 
   state.currentGrid = newCurrentGrid
-  state.displayGrid = newDisplayGrid
 
-  draw(newDisplayGrid)
+  paint(displayGrid)
 }
 
 const tick = () => {
-  console.log('tick')
   state.score = state.score + 1
   state.currentBlock.y += 1
   updateGrid()
@@ -97,11 +94,41 @@ window.onload = () => {
   updateStoppedState()
 }
 
-document.addEventListener('keyup', (e) => {
-  switch (e.key.toUpperCase()) {
-    case 'S':
+document.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case 's':
       state.stopped = !state.stopped
       updateStoppedState()
       break
+    case 'ArrowLeft': {
+      const newX = state.currentBlock.x - 1
+      const block = blocks[state.currentBlock.blockCode]
+      const outOfBound = block.some((row) =>
+        row.some((value, colIdx) => value && newX - colIdx < 0)
+      )
+
+      if (!outOfBound) {
+        state.currentBlock.x = newX
+        updateGrid()
+      }
+
+      break
+    }
+    case 'ArrowRight': {
+      const newX = state.currentBlock.x + 1
+      const block = blocks[state.currentBlock.blockCode]
+      const outOfBound = block.some((row) =>
+        row.some(
+          (value, colIdx) => value && newX - colIdx >= config.gridSize.col
+        )
+      )
+
+      if (!outOfBound) {
+        state.currentBlock.x = newX
+        updateGrid()
+      }
+
+      break
+    }
   }
 })
