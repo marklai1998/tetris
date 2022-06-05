@@ -6,6 +6,7 @@ const gridSize = { row: 20, col: 10 }
 let solidGrid = getGrid(gridSize)
 let currentGrid = getGrid(gridSize)
 let displayGrid = getGrid(gridSize)
+let stopped = true
 
 window.onload = () => {
   const playArea = document.getElementById('grid')
@@ -28,3 +29,20 @@ window.onload = () => {
     playArea.appendChild(rowEle)
   })
 }
+
+document.addEventListener('keyup', (e) => {
+  switch (e.key.toUpperCase()) {
+    case 'S':
+      const newState = !stopped
+      const stop = document.getElementById('stop')?.classList
+      if (!stop) return
+
+      if (newState) {
+        stop.remove('active')
+      } else {
+        stop.add('active')
+      }
+      stopped = newState
+      break
+  }
+})
