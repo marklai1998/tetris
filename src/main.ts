@@ -46,7 +46,6 @@ const tick = () => {
     const newY = currentState.currentBlock.y + 1
 
     drawBlockToGrid({
-      dryRun: true,
       grid: currentState.solidGrid,
       block: { ...currentState.currentBlock, y: newY },
     })
@@ -98,9 +97,8 @@ document.addEventListener('keydown', (e) => {
             : currentState.currentBlock.rotation + 1
         ) as 0 | 1 | 2 | 3
         drawBlockToGrid({
-          dryRun: true,
           grid: currentState.solidGrid,
-          block: { ...currentState.currentBlock },
+          block: { ...currentState.currentBlock, rotation: newRotation },
         })
         currentState.currentBlock.rotation = newRotation
       } catch (e) {
@@ -115,7 +113,6 @@ document.addEventListener('keydown', (e) => {
       try {
         const newX = currentState.currentBlock.x - 1
         drawBlockToGrid({
-          dryRun: true,
           grid: currentState.solidGrid,
           block: { ...currentState.currentBlock, x: newX },
         })
@@ -132,7 +129,6 @@ document.addEventListener('keydown', (e) => {
       try {
         const newX = currentState.currentBlock.x + 1
         drawBlockToGrid({
-          dryRun: true,
           grid: currentState.solidGrid,
           block: { ...currentState.currentBlock, x: newX },
         })
