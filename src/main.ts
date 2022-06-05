@@ -1,28 +1,28 @@
-import { blocks } from './constants/blockMap'
+import { config } from './constants/config'
 import './index.css'
+import { BlockState, State } from './types/state'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { getGrid } from './utils/getGrid'
 import { getRandomBlock } from './utils/getRandomBlock'
 import { mergeGrid } from './utils/mergeGrid'
 
-const config = { gridSize: { row: 20, col: 10 }, speed: 1000 }
-
-const getInitialBlock = () => ({
+const getInitialBlock = (): BlockState => ({
   x: 6,
   y: 0,
+  rotation: 0,
   blockCode: getRandomBlock(),
 })
 
-const getInitialState = () => ({
+const getInitialState = (): State => ({
   solidGrid: getGrid(config.gridSize),
   currentGrid: getGrid(config.gridSize),
-  clock: undefined as number | undefined,
+  currentBlock: getInitialBlock(),
+  clock: undefined,
   stopped: true,
   score: 0,
-  currentBlock: getInitialBlock(),
 })
 
-let state = getInitialState()
+let currentState = getInitialState()
 
 const paint = (grid: (string | number)[][]) => {
   const playArea = document.querySelector('#grid')
@@ -49,43 +49,37 @@ const paint = (grid: (string | number)[][]) => {
 
 const updateGrid = () => {
   const newCurrentGrid = drawBlockToGrid({
-    blockCode: state.currentBlock.blockCode,
     grid: getGrid(config.gridSize),
-    x: state.currentBlock.x,
-    y: state.currentBlock.y,
+    block: currentState.currentBlock,
   })
 
-  const displayGrid = getGrid(config.gridSize).map((row, rowIdx) =>
-    row.map(
-      (col, colIdx) =>
-        newCurrentGrid[rowIdx][colIdx] || state.solidGrid[rowIdx][colIdx]
-    )
-  )
+  const displayGrid = mergeGrid(newCurrentGrid, currentState.solidGrid)
 
-  state.currentGrid = newCurrentGrid
+  currentState.currentGrid = newCurrentGrid
 
   paint(displayGrid)
 }
 
 const tick = () => {
   try {
-    const newY = state.currentBlock.y + 1
+    const newY = currentState.currentBlock.y + 1
 
     drawBlockToGrid({
-      blockCode: state.currentBlock.blockCode,
-      grid: state.solidGrid,
-      x: state.currentBlock.x,
-      y: newY,
       dryRun: true,
+      grid: currentState.solidGrid,
+      block: { ...currentState.currentBlock, y: newY },
     })
 
-    state.currentBlock.y = newY
+    currentState.currentBlock.y = newY
   } catch (e) {
     // Landed
-    state.solidGrid = mergeGrid(state.currentGrid, state.solidGrid)
-    state.currentBlock = getInitialBlock()
+    currentState.solidGrid = mergeGrid(
+      currentState.currentGrid,
+      currentState.solidGrid
+    )
+    currentState.currentBlock = getInitialBlock()
   } finally {
-    state.score = state.score + 1
+    currentState.score = currentState.score + 1
     updateGrid()
   }
 }
@@ -93,12 +87,12 @@ const tick = () => {
 const updateStoppedState = () => {
   const stop = document.querySelector('#stop')?.classList
   if (!stop) return
-  if (state.stopped) {
-    clearInterval(state.clock)
-    state.clock = undefined
+  if (currentState.stopped) {
+    clearInterval(currentState.clock)
+    currentState.clock = undefined
     stop.add('active')
   } else {
-    state.clock = setInterval(tick, config.speed)
+    currentState.clock = setInterval(tick, config.speed)
     stop.remove('active')
   }
 }
@@ -111,21 +105,40 @@ window.onload = () => {
 document.addEventListener('keydown', (e) => {
   switch (e.key) {
     case 's':
-      state.stopped = !state.stopped
+      currentState.stopped = !currentState.stopped
       updateStoppedState()
       break
-    case 'ArrowLeft': {
-      if (state.stopped) return
+    case 'ArrowUp': {
+      if (currentState.stopped) return
       try {
-        const newX = state.currentBlock.x - 1
+        const newRotation = (
+          currentState.currentBlock.rotation + 1 > 3
+            ? 0
+            : currentState.currentBlock.rotation + 1
+        ) as 0 | 1 | 2 | 3
         drawBlockToGrid({
-          blockCode: state.currentBlock.blockCode,
-          grid: state.solidGrid,
-          x: newX,
-          y: state.currentBlock.y,
           dryRun: true,
+          grid: currentState.solidGrid,
+          block: { ...currentState.currentBlock },
         })
-        state.currentBlock.x = newX
+        currentState.currentBlock.rotation = newRotation
+      } catch (e) {
+        //Do nothing
+      } finally {
+        updateGrid()
+      }
+      break
+    }
+    case 'ArrowLeft': {
+      if (currentState.stopped) return
+      try {
+        const newX = currentState.currentBlock.x - 1
+        drawBlockToGrid({
+          dryRun: true,
+          grid: currentState.solidGrid,
+          block: { ...currentState.currentBlock, x: newX },
+        })
+        currentState.currentBlock.x = newX
       } catch (e) {
         //Do nothing
       } finally {
@@ -134,17 +147,15 @@ document.addEventListener('keydown', (e) => {
       break
     }
     case 'ArrowRight': {
-      if (state.stopped) return
+      if (currentState.stopped) return
       try {
-        const newX = state.currentBlock.x + 1
+        const newX = currentState.currentBlock.x + 1
         drawBlockToGrid({
-          blockCode: state.currentBlock.blockCode,
-          grid: state.solidGrid,
-          x: newX,
-          y: state.currentBlock.y,
           dryRun: true,
+          grid: currentState.solidGrid,
+          block: { ...currentState.currentBlock, x: newX },
         })
-        state.currentBlock.x = newX
+        currentState.currentBlock.x = newX
       } catch (e) {
         //Do nothing
       } finally {

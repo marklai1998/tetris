@@ -1,21 +1,22 @@
+import { rotateMatrix } from './rotateMatrix'
+import { Grid } from './../types/grid'
 import { blocks } from '../constants/blockMap'
+import { BlockState } from '../types/state'
 
 export const drawBlockToGrid = ({
-  blockCode,
   grid,
-  y,
-  x,
+  block: { x, y, blockCode, rotation },
   dryRun,
 }: {
-  grid: (string | number)[][]
-  blockCode: keyof typeof blocks
-  x: number
-  y: number
+  grid: Grid
+  block: BlockState
   dryRun?: boolean
 }) => {
   const block = blocks[blockCode]
 
-  block.forEach((row, rowIdx) => {
+  const rotatedBlock = rotateMatrix(block, rotation)
+
+  rotatedBlock.forEach((row, rowIdx) => {
     const targetY = y - rowIdx
     const hitBottom = targetY >= grid.length
     if (hitBottom) {
