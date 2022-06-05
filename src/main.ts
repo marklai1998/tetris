@@ -1,15 +1,32 @@
 import './index.css'
 import { getGrid } from './utils/getGrid'
 
-const gridSize = { row: 20, col: 10 }
+const config = { gridSize: { row: 20, col: 10 }, speed: 1000 }
 
-let solidGrid = getGrid(gridSize)
-let currentGrid = getGrid(gridSize)
-let displayGrid = getGrid(gridSize)
+let solidGrid = getGrid(config.gridSize)
+let currentGrid = getGrid(config.gridSize)
+let displayGrid = getGrid(config.gridSize)
+let clock: number
 let stopped = true
 
+const tick = () => {
+  console.log('tick')
+}
+
+const updateStoppedState = () => {
+  const stop = document.querySelector('#stop')?.classList
+  if (!stop) return
+  if (stopped) {
+    clearInterval(clock)
+    stop.add('active')
+  } else {
+    clock = setInterval(tick, config.speed)
+    stop.remove('active')
+  }
+}
+
 window.onload = () => {
-  const playArea = document.getElementById('grid')
+  const playArea = document.querySelector('#grid')
   if (!playArea) return
 
   displayGrid.forEach((row, rowIdx) => {
@@ -28,21 +45,15 @@ window.onload = () => {
 
     playArea.appendChild(rowEle)
   })
+
+  updateStoppedState()
 }
 
 document.addEventListener('keyup', (e) => {
   switch (e.key.toUpperCase()) {
     case 'S':
-      const newState = !stopped
-      const stop = document.getElementById('stop')?.classList
-      if (!stop) return
-
-      if (newState) {
-        stop.remove('active')
-      } else {
-        stop.add('active')
-      }
-      stopped = newState
+      stopped = !stopped
+      updateStoppedState()
       break
   }
 })
