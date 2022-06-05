@@ -68,18 +68,26 @@ const updateGrid = () => {
 }
 
 const tick = () => {
-  state.score = state.score + 1
+  try {
+    const newY = state.currentBlock.y + 1
 
-  // TODO: landed logic
-  const isLanded = state.currentGrid.at(-1)?.some(Boolean)
+    drawBlockToGrid({
+      blockCode: state.currentBlock.blockCode,
+      grid: state.solidGrid,
+      x: state.currentBlock.x,
+      y: newY,
+      dryRun: true,
+    })
 
-  if (isLanded) {
+    state.currentBlock.y = newY
+  } catch (e) {
+    // Landed
     state.solidGrid = mergeGrid(state.currentGrid, state.solidGrid)
     state.currentBlock = getInitialBlock()
+  } finally {
+    state.score = state.score + 1
+    updateGrid()
   }
-
-  state.currentBlock.y += 1
-  updateGrid()
 }
 
 const updateStoppedState = () => {
@@ -107,34 +115,40 @@ document.addEventListener('keydown', (e) => {
       updateStoppedState()
       break
     case 'ArrowLeft': {
+      if (state.stopped) return
       try {
         const newX = state.currentBlock.x - 1
         drawBlockToGrid({
           blockCode: state.currentBlock.blockCode,
-          grid: getGrid(config.gridSize),
+          grid: state.solidGrid,
           x: newX,
           y: state.currentBlock.y,
+          dryRun: true,
         })
         state.currentBlock.x = newX
-        updateGrid()
       } catch (e) {
         //Do nothing
+      } finally {
+        updateGrid()
       }
       break
     }
     case 'ArrowRight': {
+      if (state.stopped) return
       try {
         const newX = state.currentBlock.x + 1
         drawBlockToGrid({
           blockCode: state.currentBlock.blockCode,
-          grid: getGrid(config.gridSize),
+          grid: state.solidGrid,
           x: newX,
           y: state.currentBlock.y,
+          dryRun: true,
         })
         state.currentBlock.x = newX
-        updateGrid()
       } catch (e) {
         //Do nothing
+      } finally {
+        updateGrid()
       }
 
       break

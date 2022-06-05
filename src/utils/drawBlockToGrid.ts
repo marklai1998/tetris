@@ -5,11 +5,13 @@ export const drawBlockToGrid = ({
   grid,
   y,
   x,
+  dryRun,
 }: {
   grid: (string | number)[][]
   blockCode: keyof typeof blocks
   x: number
   y: number
+  dryRun?: boolean
 }) => {
   const block = blocks[blockCode]
 
@@ -29,7 +31,14 @@ export const drawBlockToGrid = ({
         }
 
         const targetX = x - colIdx
-        grid[targetY][targetX] = blockCode
+
+        if (grid[targetY][targetX]) {
+          throw new Error('OVERLAP_VALUE')
+        }
+
+        if (!dryRun) {
+          grid[targetY][targetX] = blockCode
+        }
       })
     }
   })
