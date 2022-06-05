@@ -25,6 +25,21 @@ const getInitialState = (): State => ({
 
 let currentState = getInitialState()
 
+const updateBlock = (update: Partial<BlockState>) => {
+  try {
+    const newState = { ...currentState.currentBlock, ...update }
+    drawBlockToGrid({
+      grid: currentState.grid,
+      block: newState,
+    })
+    currentState.currentBlock = newState
+    updateGrid()
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 const updateGrid = () => {
   const playArea = document.querySelector('#grid')
   if (!playArea) return
@@ -38,24 +53,17 @@ const updateGrid = () => {
 }
 
 const tick = () => {
-  try {
-    const newY = currentState.currentBlock.y + 1
+  const successfullyMoveDown = updateBlock({
+    y: currentState.currentBlock.y + 1,
+  })
 
-    drawBlockToGrid({
-      grid: currentState.grid,
-      block: { ...currentState.currentBlock, y: newY },
-    })
-
-    currentState.currentBlock.y = newY
-  } catch (e) {
+  if (!successfullyMoveDown) {
     // Landed
     currentState.grid = drawBlockToGrid({
       grid: currentState.grid,
       block: currentState.currentBlock,
     })
     currentState.currentBlock = getInitialBlock()
-  } finally {
-    currentState.score = currentState.score + 1
     updateGrid()
   }
 }
@@ -86,72 +94,32 @@ document.addEventListener('keydown', (e) => {
       break
     case 'ArrowUp': {
       if (currentState.stopped) return
-      try {
-        const newRotation = (
-          currentState.currentBlock.rotation + 1 > 3
-            ? 0
-            : currentState.currentBlock.rotation + 1
-        ) as 0 | 1 | 2 | 3
-        drawBlockToGrid({
-          grid: currentState.grid,
-          block: { ...currentState.currentBlock, rotation: newRotation },
-        })
-        currentState.currentBlock.rotation = newRotation
-      } catch (e) {
-        //Do nothing
-      } finally {
-        updateGrid()
-      }
+      updateBlock({
+        rotation: (currentState.currentBlock.rotation + 1 > 3
+          ? 0
+          : currentState.currentBlock.rotation + 1) as 0 | 1 | 2 | 3,
+      })
       break
     }
     case 'ArrowLeft': {
       if (currentState.stopped) return
-      try {
-        const newX = currentState.currentBlock.x - 1
-        drawBlockToGrid({
-          grid: currentState.grid,
-          block: { ...currentState.currentBlock, x: newX },
-        })
-        currentState.currentBlock.x = newX
-      } catch (e) {
-        //Do nothing
-      } finally {
-        updateGrid()
-      }
+      updateBlock({
+        x: currentState.currentBlock.x - 1,
+      })
       break
     }
     case 'ArrowRight': {
       if (currentState.stopped) return
-      try {
-        const newX = currentState.currentBlock.x + 1
-        drawBlockToGrid({
-          grid: currentState.grid,
-          block: { ...currentState.currentBlock, x: newX },
-        })
-        currentState.currentBlock.x = newX
-      } catch (e) {
-        //Do nothing
-      } finally {
-        updateGrid()
-      }
-
+      updateBlock({
+        x: currentState.currentBlock.x + 1,
+      })
       break
     }
     case 'ArrowDown': {
       if (currentState.stopped) return
-      try {
-        const newY = currentState.currentBlock.y + 1
-        drawBlockToGrid({
-          grid: currentState.grid,
-          block: { ...currentState.currentBlock, y: newY },
-        })
-        currentState.currentBlock.y = newY
-      } catch (e) {
-        //Do nothing
-      } finally {
-        updateGrid()
-      }
-
+      updateBlock({
+        y: currentState.currentBlock.y + 1,
+      })
       break
     }
   }
