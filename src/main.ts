@@ -1,5 +1,7 @@
-import { config } from './constants/config'
 import './index.css'
+import { paint } from './utils/paint'
+import { config } from './constants/config'
+
 import { BlockState, State } from './types/state'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { getGrid } from './utils/getGrid'
@@ -24,29 +26,6 @@ const getInitialState = (): State => ({
 
 let currentState = getInitialState()
 
-const paint = (grid: (string | number)[][]) => {
-  const playArea = document.querySelector('#grid')
-  if (!playArea) return
-  playArea.innerHTML = ''
-
-  grid.forEach((row, rowIdx) => {
-    const rowEle = document.createElement('div')
-    rowEle.className = 'grid-row'
-    rowEle.id = 'R' + rowIdx
-
-    row.forEach((cell, cellIdx) => {
-      const cellEle = document.createElement('cell')
-      cellEle.textContent = String(cell)
-      cellEle.id = 'R' + rowIdx + 'C' + cellIdx
-      cellEle.className = `grid-cell ${cell ? `gc-${cell}` : ''}`
-
-      rowEle.appendChild(cellEle)
-    })
-
-    playArea.appendChild(rowEle)
-  })
-}
-
 const updateGrid = () => {
   const newCurrentGrid = drawBlockToGrid({
     grid: getGrid(config.gridSize),
@@ -57,7 +36,9 @@ const updateGrid = () => {
 
   currentState.currentGrid = newCurrentGrid
 
-  paint(displayGrid)
+  const playArea = document.querySelector('#grid')
+  if (!playArea) return
+  paint(playArea, displayGrid)
 }
 
 const tick = () => {
