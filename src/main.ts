@@ -1,20 +1,25 @@
 import { blocks } from './constants/blockMap'
 import './index.css'
+import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { getGrid } from './utils/getGrid'
 import { getRandomBlock } from './utils/getRandomBlock'
+import { mergeGrid } from './utils/mergeGrid'
 
 const config = { gridSize: { row: 20, col: 10 }, speed: 1000 }
+
+const getInitialBlock = () => ({
+  x: 6,
+  y: 0,
+  blockCode: getRandomBlock(),
+})
+
 const getInitialState = () => ({
   solidGrid: getGrid(config.gridSize),
   currentGrid: getGrid(config.gridSize),
   clock: undefined as number | undefined,
   stopped: true,
   score: 0,
-  currentBlock: {
-    x: 6,
-    y: 0,
-    blockCode: getRandomBlock(),
-  },
+  currentBlock: getInitialBlock(),
 })
 
 let state = getInitialState()
@@ -43,19 +48,11 @@ const paint = (grid: (string | number)[][]) => {
 }
 
 const updateGrid = () => {
-  const newCurrentGrid = getGrid(config.gridSize)
-  const block = blocks[state.currentBlock.blockCode]
-
-  block.forEach((row, rowIdx) => {
-    const y = state.currentBlock.y - rowIdx
-    if (y >= 0 && y < newCurrentGrid.length) {
-      row.forEach((value, colIdx) => {
-        if (value) {
-          const x = state.currentBlock.x - colIdx
-          newCurrentGrid[y][x] = state.currentBlock.blockCode
-        }
-      })
-    }
+  const newCurrentGrid = drawBlockToGrid({
+    blockCode: state.currentBlock.blockCode,
+    grid: getGrid(config.gridSize),
+    x: state.currentBlock.x,
+    y: state.currentBlock.y,
   })
 
   const displayGrid = getGrid(config.gridSize).map((row, rowIdx) =>
@@ -72,6 +69,15 @@ const updateGrid = () => {
 
 const tick = () => {
   state.score = state.score + 1
+
+  // TODO: landed logic
+  const isLanded = state.currentGrid.at(-1)?.some(Boolean)
+
+  if (isLanded) {
+    state.solidGrid = mergeGrid(state.currentGrid, state.solidGrid)
+    state.currentBlock = getInitialBlock()
+  }
+
   state.currentBlock.y += 1
   updateGrid()
 }
@@ -101,31 +107,34 @@ document.addEventListener('keydown', (e) => {
       updateStoppedState()
       break
     case 'ArrowLeft': {
-      const newX = state.currentBlock.x - 1
-      const block = blocks[state.currentBlock.blockCode]
-      const outOfBound = block.some((row) =>
-        row.some((value, colIdx) => value && newX - colIdx < 0)
-      )
-
-      if (!outOfBound) {
+      try {
+        const newX = state.currentBlock.x - 1
+        drawBlockToGrid({
+          blockCode: state.currentBlock.blockCode,
+          grid: getGrid(config.gridSize),
+          x: newX,
+          y: state.currentBlock.y,
+        })
         state.currentBlock.x = newX
         updateGrid()
+      } catch (e) {
+        //Do nothing
       }
-
       break
     }
     case 'ArrowRight': {
-      const newX = state.currentBlock.x + 1
-      const block = blocks[state.currentBlock.blockCode]
-      const outOfBound = block.some((row) =>
-        row.some(
-          (value, colIdx) => value && newX - colIdx >= config.gridSize.col
-        )
-      )
-
-      if (!outOfBound) {
+      try {
+        const newX = state.currentBlock.x + 1
+        drawBlockToGrid({
+          blockCode: state.currentBlock.blockCode,
+          grid: getGrid(config.gridSize),
+          x: newX,
+          y: state.currentBlock.y,
+        })
         state.currentBlock.x = newX
         updateGrid()
+      } catch (e) {
+        //Do nothing
       }
 
       break
