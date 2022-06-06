@@ -17,10 +17,6 @@ export const drawBlockToGrid = ({
 
   rotatedBlock.forEach((row, rowIdx) => {
     const targetY = y - rowIdx
-    const hitBottom = targetY >= clonedGrid.length
-    if (hitBottom) {
-      throw new Error('OUT_OF_BOUND')
-    }
 
     row.forEach((value, colIdx) => {
       if (!value) return
@@ -28,13 +24,16 @@ export const drawBlockToGrid = ({
 
       const hitLeft = targetX < 0
       const hitRight = targetX >= clonedGrid?.[targetY]?.length
+      const hitBottom = targetY >= clonedGrid.length
 
-      if (hitLeft || hitRight) {
+      if (hitLeft || hitRight || hitBottom) {
         throw new Error('OUT_OF_BOUND')
       }
+
       if (clonedGrid?.[targetY]?.[targetX]) {
         throw new Error('OVERLAP_VALUE')
       }
+
       if (targetY >= 0) {
         clonedGrid[targetY][targetX] = blockCode
       }
