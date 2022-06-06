@@ -6,6 +6,7 @@ import { BlockState, State } from './types/state'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { getGrid } from './utils/getGrid'
 import { getRandomBlock } from './utils/getRandomBlock'
+import { removeCompleteLine } from './utils/removeCompleteLine'
 
 const getInitialBlock = (): BlockState => ({
   x: 6,
@@ -59,10 +60,12 @@ const tick = () => {
 
   if (!successfullyMoveDown) {
     // Landed
-    currentState.grid = drawBlockToGrid({
+    const newGrid = drawBlockToGrid({
       grid: currentState.grid,
       block: currentState.currentBlock,
     })
+
+    currentState.grid = removeCompleteLine(newGrid)
     currentState.currentBlock = getInitialBlock()
     updateGrid()
   }
@@ -87,7 +90,6 @@ window.onload = () => {
 }
 
 document.addEventListener('keydown', (e) => {
-  console.log(e.key)
   switch (e.key) {
     case 's':
       currentState.stopped = !currentState.stopped
@@ -126,7 +128,6 @@ document.addEventListener('keydown', (e) => {
     case ' ': {
       if (currentState.stopped) return
       let hitBottom = false
-
       while (!hitBottom) {
         hitBottom = !updateBlock({
           y: currentState.currentBlock.y + 1,
