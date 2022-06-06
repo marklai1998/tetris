@@ -87,6 +87,7 @@ window.onload = () => {
 }
 
 document.addEventListener('keydown', (e) => {
+  console.log(e.key)
   switch (e.key) {
     case 's':
       currentState.stopped = !currentState.stopped
@@ -120,6 +121,17 @@ document.addEventListener('keydown', (e) => {
       updateBlock({
         y: currentState.currentBlock.y + 1,
       })
+      break
+    }
+    case ' ': {
+      if (currentState.stopped) return
+      let hitBottom = false
+
+      while (!hitBottom) {
+        hitBottom = !updateBlock({
+          y: currentState.currentBlock.y + 1,
+        })
+      }
       break
     }
   }
