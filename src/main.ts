@@ -59,6 +59,14 @@ const updateScore = () => {
   scoreEle.innerText = currentState.score.toString()
 }
 
+const initGame = () => {
+  clearInterval(currentState.clock)
+  currentState = getInitialState()
+  updateGrid()
+  updateScore()
+  updateStoppedState()
+}
+
 const tick = () => {
   const successfullyMoveDown = updateBlock({
     y: currentState.currentBlock.y + 1,
@@ -74,10 +82,17 @@ const tick = () => {
     const { grid, removedLine } = removeCompleteLine(newGrid)
     currentState.score += removedLine * 100
     currentState.grid = grid
-    currentState.currentBlock = getInitialBlock()
+    const successfullyInit = updateBlock(getInitialBlock())
+    if (!successfullyInit) {
+      // End Game
+      initGame()
+    } else {
+      currentState.score += 1
+    }
     updateGrid()
+  } else {
+    currentState.score += 1
   }
-  currentState.score += 1
   updateScore()
 }
 
@@ -95,9 +110,7 @@ const updateStoppedState = () => {
 }
 
 window.onload = () => {
-  updateGrid()
-  updateScore()
-  updateStoppedState()
+  initGame()
 }
 
 document.addEventListener('keydown', (e) => {
