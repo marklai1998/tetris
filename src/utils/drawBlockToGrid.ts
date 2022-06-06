@@ -21,24 +21,24 @@ export const drawBlockToGrid = ({
     if (hitBottom) {
       throw new Error('OUT_OF_BOUND')
     }
-    if (targetY >= 0) {
-      row.forEach((value, colIdx) => {
-        if (!value) return
-        const hitLeft = x - colIdx < 0
-        const hitRight = x - colIdx >= clonedGrid[targetY].length
-        if (hitLeft || hitRight) {
-          throw new Error('OUT_OF_BOUND')
-        }
 
-        const targetX = x - colIdx
+    row.forEach((value, colIdx) => {
+      if (!value) return
+      const targetX = x - colIdx
 
-        if (clonedGrid[targetY][targetX]) {
-          throw new Error('OVERLAP_VALUE')
-        }
+      const hitLeft = targetX < 0
+      const hitRight = targetX >= clonedGrid?.[targetY]?.length
 
+      if (hitLeft || hitRight) {
+        throw new Error('OUT_OF_BOUND')
+      }
+      if (clonedGrid?.[targetY]?.[targetX]) {
+        throw new Error('OVERLAP_VALUE')
+      }
+      if (targetY >= 0) {
         clonedGrid[targetY][targetX] = blockCode
-      })
-    }
+      }
+    })
   })
   return clonedGrid
 }
