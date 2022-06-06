@@ -3,11 +3,13 @@ import { Grid } from './../types/grid'
 
 export const removeCompleteLine = (grid: Grid) => {
   const withoutCompleteLine = grid.filter((row) => !row.every(Boolean))
-  return [
-    ...getGrid({
-      row: grid.length - withoutCompleteLine.length,
-      col: grid[0].length,
-    }),
-    ...withoutCompleteLine,
-  ]
+  const removedLine = grid.length - withoutCompleteLine.length
+
+  return {
+    removedLine,
+    grid: [
+      ...getGrid({ row: removedLine, col: grid[0].length }),
+      ...withoutCompleteLine,
+    ],
+  }
 }

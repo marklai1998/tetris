@@ -53,6 +53,12 @@ const updateGrid = () => {
   paint(playArea, displayGrid)
 }
 
+const updateScore = () => {
+  const scoreEle = document.querySelector('#score') as HTMLElement
+  if (!scoreEle) return
+  scoreEle.innerText = currentState.score.toString()
+}
+
 const tick = () => {
   const successfullyMoveDown = updateBlock({
     y: currentState.currentBlock.y + 1,
@@ -65,10 +71,14 @@ const tick = () => {
       block: currentState.currentBlock,
     })
 
-    currentState.grid = removeCompleteLine(newGrid)
+    const { grid, removedLine } = removeCompleteLine(newGrid)
+    currentState.score += removedLine * 100
+    currentState.grid = grid
     currentState.currentBlock = getInitialBlock()
     updateGrid()
   }
+  currentState.score += 1
+  updateScore()
 }
 
 const updateStoppedState = () => {
@@ -86,6 +96,7 @@ const updateStoppedState = () => {
 
 window.onload = () => {
   updateGrid()
+  updateScore()
   updateStoppedState()
 }
 
