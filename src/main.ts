@@ -114,6 +114,9 @@ document.addEventListener('keydown', (e) => {
         currentState.stopped = !currentState.stopped
         updateStoppedState()
         break
+      case 'r':
+        initGame()
+        break
       case 'ArrowUp': {
         if (currentState.stopped) return
         updateBlock({
