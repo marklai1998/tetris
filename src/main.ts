@@ -27,18 +27,13 @@ const getInitialState = (): State => ({
 let currentState = getInitialState()
 
 const updateBlock = (update: Partial<BlockState>) => {
-  try {
-    const newState = { ...currentState.currentBlock, ...update }
-    drawBlockToGrid({
-      grid: currentState.grid,
-      block: newState,
-    })
-    currentState.currentBlock = newState
-    updateGrid()
-    return true
-  } catch (e) {
-    return false
-  }
+  const newState = { ...currentState.currentBlock, ...update }
+  drawBlockToGrid({
+    grid: currentState.grid,
+    block: newState,
+  })
+  currentState.currentBlock = newState
+  updateGrid()
 }
 
 const updateGrid = () => {
@@ -68,11 +63,12 @@ const initGame = () => {
 }
 
 const tick = () => {
-  const successfullyMoveDown = updateBlock({
-    y: currentState.currentBlock.y + 1,
-  })
-
-  if (!successfullyMoveDown) {
+  try {
+    currentState.score += 1
+    updateBlock({
+      y: currentState.currentBlock.y + 1,
+    })
+  } catch (e) {
     // Landed
     const newGrid = drawBlockToGrid({
       grid: currentState.grid,
@@ -82,18 +78,16 @@ const tick = () => {
     const { grid, removedLine } = removeCompleteLine(newGrid)
     currentState.score += removedLine * 100
     currentState.grid = grid
-    const successfullyInit = updateBlock(getInitialBlock())
-    if (!successfullyInit) {
+
+    try {
+      updateBlock(getInitialBlock())
+    } catch (e) {
       // End Game
       initGame()
-    } else {
-      currentState.score += 1
     }
-    updateGrid()
-  } else {
-    currentState.score += 1
+  } finally {
+    updateScore()
   }
-  updateScore()
 }
 
 const updateStoppedState = () => {
@@ -114,50 +108,55 @@ window.onload = () => {
 }
 
 document.addEventListener('keydown', (e) => {
-  switch (e.key) {
-    case 's':
-      currentState.stopped = !currentState.stopped
-      updateStoppedState()
-      break
-    case 'ArrowUp': {
-      if (currentState.stopped) return
-      updateBlock({
-        rotation: (currentState.currentBlock.rotation + 1 > 3
-          ? 0
-          : currentState.currentBlock.rotation + 1) as 0 | 1 | 2 | 3,
-      })
-      break
-    }
-    case 'ArrowLeft': {
-      if (currentState.stopped) return
-      updateBlock({
-        x: currentState.currentBlock.x - 1,
-      })
-      break
-    }
-    case 'ArrowRight': {
-      if (currentState.stopped) return
-      updateBlock({
-        x: currentState.currentBlock.x + 1,
-      })
-      break
-    }
-    case 'ArrowDown': {
-      if (currentState.stopped) return
-      updateBlock({
-        y: currentState.currentBlock.y + 1,
-      })
-      break
-    }
-    case ' ': {
-      if (currentState.stopped) return
-      let hitBottom = false
-      while (!hitBottom) {
-        hitBottom = !updateBlock({
+  try {
+    switch (e.key) {
+      case 's':
+        currentState.stopped = !currentState.stopped
+        updateStoppedState()
+        break
+      case 'ArrowUp': {
+        if (currentState.stopped) return
+        updateBlock({
+          rotation: (currentState.currentBlock.rotation + 1 > 3
+            ? 0
+            : currentState.currentBlock.rotation + 1) as 0 | 1 | 2 | 3,
+        })
+        break
+      }
+      case 'ArrowLeft': {
+        if (currentState.stopped) return
+        updateBlock({
+          x: currentState.currentBlock.x - 1,
+        })
+        break
+      }
+      case 'ArrowRight': {
+        if (currentState.stopped) return
+        updateBlock({
+          x: currentState.currentBlock.x + 1,
+        })
+        break
+      }
+      case 'ArrowDown': {
+        if (currentState.stopped) return
+        updateBlock({
           y: currentState.currentBlock.y + 1,
         })
+        break
       }
-      break
+      case ' ': {
+        if (currentState.stopped) return
+
+        while (true) {
+          updateBlock({
+            y: currentState.currentBlock.y + 1,
+          })
+        }
+
+        break
+      }
     }
+  } catch (e) {
+    // Do nothing
   }
 })
