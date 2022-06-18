@@ -1,33 +1,29 @@
-import { Grid } from './types/grid'
+import { blocks } from './constants/blockMap'
 import { observe } from './utils/observe'
 import './index.css'
 import { config } from './constants/config'
 
 import { BlockState, State } from './types/state'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
-import { getGrid } from './utils/getGrid'
-import { getRandomBlock } from './utils/getRandomBlock'
 import { removeCompleteLine } from './utils/removeCompleteLine'
 import './components'
 import { TetrisGrid } from './components/TetrisGrid'
+import { Grid } from './types/grid'
 
-const getInitialBlock = (): BlockState => ({
-  x: 6,
-  y: 0,
-  rotation: 0,
-  blockCode: getRandomBlock(),
-})
+const getBlock = (): BlockState => {
+  const keys = Object.keys(blocks) as (keyof typeof blocks)[]
+  const blockCode = keys[Math.floor(Math.random() * keys.length)]
+  return { x: 6, y: 0, rotation: 0, blockCode }
+}
 
-let clock: number | undefined
-const getObservedState = (): State =>
-  observe(
-    {
-      grid: getGrid(config.gridSize),
-      block: getInitialBlock(),
-      clock: undefined,
-      stopped: true,
-      score: 0,
-    },
+const getObservedState = (): State => {
+  const grid: Grid = new Array(config.gridSize.row)
+    .fill(0)
+    .map(() => new Array(config.gridSize.col).fill(0))
+  const block = getBlock()
+
+  return observe(
+    { block, grid, stopped: true, score: 0 },
     (prop, { grid, block, score, stopped }) => {
       switch (prop) {
         case 'grid':
@@ -63,36 +59,32 @@ const getObservedState = (): State =>
       }
     }
   )
+}
 
+let clock: number | undefined
 let currentState = getObservedState()
 
 const updateBlock = (update: Partial<BlockState>) => {
   const newState = { ...currentState.block, ...update }
-  drawBlockToGrid({
-    grid: currentState.grid,
-    block: newState,
-  })
+  drawBlockToGrid({ grid: currentState.grid, block: newState })
   currentState.block = newState
 }
 
 const tick = () => {
   try {
     currentState.score += 1
-    updateBlock({
-      y: currentState.block.y + 1,
-    })
+    updateBlock({ y: currentState.block.y + 1 })
   } catch (e) {
     try {
       // Landed
-      const newGrid = drawBlockToGrid({
-        grid: currentState.grid,
-        block: currentState.block,
-      })
+      const { grid, block } = currentState
+      const { grid: newGrid, removedLine } = removeCompleteLine(
+        drawBlockToGrid({ grid, block })
+      )
+      updateBlock(getBlock())
 
-      const { grid, removedLine } = removeCompleteLine(newGrid)
       currentState.score += removedLine * 100
-      updateBlock(getInitialBlock())
-      currentState.grid = grid
+      currentState.grid = newGrid
     } catch (e) {
       // End Game
       currentState = getObservedState()
@@ -108,55 +100,41 @@ window.onload = () => {
   })
 
   document.querySelector('#stop')?.addEventListener('change', (e) => {
-    if (e instanceof CustomEvent) {
-      const newState = e.detail
-      currentState.stopped = newState
-    }
+    if (e instanceof CustomEvent) currentState.stopped = e.detail
   })
 }
 
 document.addEventListener('keydown', (e) => {
   try {
+    if (currentState.stopped) return
     switch (e.key) {
       case 'ArrowUp': {
-        if (currentState.stopped) return
-        updateBlock({
-          rotation: (currentState.block.rotation + 1 > 3
-            ? 0
-            : currentState.block.rotation + 1) as 0 | 1 | 2 | 3,
-        })
+        const rotation = (
+          currentState.block.rotation >= 3 ? 0 : currentState.block.rotation + 1
+        ) as BlockState['rotation']
+        updateBlock({ rotation })
         break
       }
       case 'ArrowLeft': {
-        if (currentState.stopped) return
-        updateBlock({
-          x: currentState.block.x - 1,
-        })
+        const x = currentState.block.x - 1
+        updateBlock({ x })
         break
       }
       case 'ArrowRight': {
-        if (currentState.stopped) return
-        updateBlock({
-          x: currentState.block.x + 1,
-        })
+        const x = currentState.block.x + 1
+        updateBlock({ x })
         break
       }
       case 'ArrowDown': {
-        if (currentState.stopped) return
-        updateBlock({
-          y: currentState.block.y + 1,
-        })
+        const y = currentState.block.y + 1
+        updateBlock({ y })
         break
       }
       case ' ': {
-        if (currentState.stopped) return
-
         while (true) {
-          updateBlock({
-            y: currentState.block.y + 1,
-          })
+          const y = currentState.block.y + 1
+          updateBlock({ y })
         }
-
         break
       }
     }
