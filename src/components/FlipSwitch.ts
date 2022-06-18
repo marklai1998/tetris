@@ -45,9 +45,9 @@ export class FlipSwitch extends Component<{ isActive: boolean }> {
                 color: #f44336;
             }
         </style>
-        <div class="${classnames({ active: isActive })}">
-            [${key?.toUpperCase()}] <slot />
-        </div>
+        <div class="${classnames({
+          active: isActive,
+        })}">[${key?.toUpperCase()}] <slot></slot></div>
     `
   }
 }

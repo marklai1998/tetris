@@ -1,5 +1,4 @@
 import './index.css'
-import { paint } from './utils/paint'
 import { config } from './constants/config'
 
 import { BlockState, State } from './types/state'
@@ -8,6 +7,7 @@ import { getGrid } from './utils/getGrid'
 import { getRandomBlock } from './utils/getRandomBlock'
 import { removeCompleteLine } from './utils/removeCompleteLine'
 import './components'
+import { TetrisGrid } from './components/TetrisGrid'
 
 const getInitialBlock = (): BlockState => ({
   x: 6,
@@ -26,6 +26,7 @@ const getInitialState = (): State => ({
 })
 
 let currentState = getInitialState()
+const gridEle = new TetrisGrid(currentState.grid)
 
 const updateBlock = (update: Partial<BlockState>) => {
   const newState = { ...currentState.currentBlock, ...update }
@@ -46,7 +47,9 @@ const updateGrid = () => {
     block: currentState.currentBlock,
   })
 
-  paint(playArea, displayGrid)
+  playArea.innerHTML = ''
+  gridEle.grid = displayGrid
+  playArea.appendChild(gridEle)
 }
 
 const updateScore = () => {
