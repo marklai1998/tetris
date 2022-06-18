@@ -3,12 +3,12 @@ var R=Object.defineProperty;var E=Object.getOwnPropertySymbols;var D=Object.prot
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/classnames
 */(function(r){(function(){var e={}.hasOwnProperty;function t(){for(var s=[],n=0;n<arguments.length;n++){var o=arguments[n];if(!!o){var i=typeof o;if(i==="string"||i==="number")s.push(o);else if(Array.isArray(o)){if(o.length){var l=t.apply(null,o);l&&s.push(l)}}else if(i==="object")if(o.toString===Object.prototype.toString)for(var a in o)e.call(o,a)&&o[a]&&s.push(a);else s.push(o.toString())}}return s.join(" ")}r.exports?(t.default=t,r.exports=t):window.classNames=t})()})(O);var M=O.exports;class F extends v{constructor(){super(),this.handleKeyDown=e=>{var t;if(e.key===((t=this.props.key)==null?void 0:t.toLowerCase())){const s=this.props.active!=="true";this.setState({isActive:s}),this.dispatchEvent(new CustomEvent("change",{detail:s}))}}}static get observedAttributes(){return["active","key","activeColor"]}onMount(){window.addEventListener("keydown",this.handleKeyDown)}onUmount(){window.removeEventListener("keydown",this.handleKeyDown)}render(){const{key:e,active:t}=this.props;return`
-        <style>
-            .active {
-                color: #f44336;
-            }
-        </style>
-        <div class="${M({active:t==="true"})}">[${e==null?void 0:e.toUpperCase()}] <slot></slot></div>
+      <style>
+        .active {
+          color: #f44336;
+        }
+      </style>
+      <div class="${M({active:t==="true"})}">[${e==null?void 0:e.toUpperCase()}] <slot></slot></div>
     `}}customElements.define("flip-switch",F);class T extends v{constructor(){super()}static get observedAttributes(){return["val"]}render(){const{val:e}=this.props;return`
       <style>
         .cell {
