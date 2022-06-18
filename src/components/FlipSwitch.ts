@@ -1,11 +1,7 @@
 import { Component } from './Component'
 import classnames from 'classnames'
 
-export class FlipSwitch extends Component<{ isActive: boolean }> {
-  state = {
-    isActive: this.props.active === 'true',
-  }
-
+export class FlipSwitch extends Component<{}> {
   constructor() {
     super()
   }
@@ -22,23 +18,16 @@ export class FlipSwitch extends Component<{ isActive: boolean }> {
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  onPropsChange(name: string, oldValue: unknown, newValue: unknown) {
-    if (name === 'active') {
-      this.setState({ isActive: newValue === 'true' })
-    }
-  }
-
   handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === this.props.key?.toLowerCase()) {
-      const newState = !this.state.isActive
+      const newState = !(this.props.active === 'true')
       this.setState({ isActive: newState })
       this.dispatchEvent(new CustomEvent('change', { detail: newState }))
     }
   }
 
   render() {
-    const { isActive } = this.state
-    const { key } = this.props
+    const { key, active } = this.props
     return `
         <style>
             .active {
@@ -46,7 +35,7 @@ export class FlipSwitch extends Component<{ isActive: boolean }> {
             }
         </style>
         <div class="${classnames({
-          active: isActive,
+          active: active === 'true',
         })}">[${key?.toUpperCase()}] <slot></slot></div>
     `
   }

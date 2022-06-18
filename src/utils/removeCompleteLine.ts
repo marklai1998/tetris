@@ -1,9 +1,11 @@
+import { cloneGrid } from './cloneArray'
 import { getGrid } from './getGrid'
 import { Grid } from './../types/grid'
 
 export const removeCompleteLine = (grid: Grid) => {
-  const withoutCompleteLine = grid.filter((row) => !row.every(Boolean))
-  const removedLine = grid.length - withoutCompleteLine.length
+  const clonedGrid = cloneGrid(grid)
+  const withoutCompleteLine = clonedGrid.filter((row) => !row.every(Boolean))
+  const removedLine = clonedGrid.length - withoutCompleteLine.length
 
   return {
     removedLine,

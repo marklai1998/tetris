@@ -10,9 +10,7 @@ export type BlockState = {
 
 export type State = {
   grid: Grid
-  currentBlock: BlockState
-
-  clock: number | undefined
+  block: BlockState
   stopped: boolean
   score: number
 }
