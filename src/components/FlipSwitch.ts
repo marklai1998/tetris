@@ -29,14 +29,14 @@ export class FlipSwitch extends Component<{}> {
   render() {
     const { key, active } = this.props
     return `
-        <style>
-            .active {
-                color: #f44336;
-            }
-        </style>
-        <div class="${classnames({
-          active: active === 'true',
-        })}">[${key?.toUpperCase()}] <slot></slot></div>
+      <style>
+        .active {
+          color: #f44336;
+        }
+      </style>
+      <div class="${classnames({
+        active: active === 'true',
+      })}">[${key?.toUpperCase()}] <slot></slot></div>
     `
   }
 }
