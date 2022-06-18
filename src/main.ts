@@ -70,6 +70,12 @@ const updateBlock = (update: Partial<BlockState>) => {
   currentState.block = newState
 }
 
+const resetClockTick = () => {
+  clearInterval(clock)
+  clock = undefined
+  clock = setInterval(tick, config.speed)
+}
+
 const tick = () => {
   try {
     currentState.score += 1
@@ -131,9 +137,16 @@ document.addEventListener('keydown', (e) => {
         break
       }
       case ' ': {
-        while (true) {
-          const y = currentState.block.y + 1
-          updateBlock({ y })
+        try {
+          while (true) {
+            const y = currentState.block.y + 1
+            updateBlock({ y })
+          }
+        } catch (e) {
+          // Do nothing
+        } finally {
+          tick()
+          resetClockTick()
         }
         break
       }
