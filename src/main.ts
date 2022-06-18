@@ -7,6 +7,7 @@ import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { getGrid } from './utils/getGrid'
 import { getRandomBlock } from './utils/getRandomBlock'
 import { removeCompleteLine } from './utils/removeCompleteLine'
+import './components'
 
 const getInitialBlock = (): BlockState => ({
   x: 6,
@@ -91,32 +92,36 @@ const tick = () => {
 }
 
 const updateStoppedState = () => {
-  const stop = document.querySelector('#stop')?.classList
-  if (!stop) return
+  const stopSwitch = document.querySelector('#stop')
+  if (!stopSwitch) return
   if (currentState.stopped) {
     clearInterval(currentState.clock)
     currentState.clock = undefined
-    stop.add('active')
   } else {
     currentState.clock = setInterval(tick, config.speed)
-    stop.remove('active')
   }
+  stopSwitch?.setAttribute('active', currentState.stopped ? 'true' : 'false')
 }
 
 window.onload = () => {
   initGame()
+
+  document.querySelector('#restart')?.addEventListener('change', (e) => {
+    if (e instanceof CustomEvent) initGame()
+  })
+
+  document.querySelector('#stop')?.addEventListener('change', (e) => {
+    if (e instanceof CustomEvent) {
+      const newState = e.detail
+      currentState.stopped = newState
+      updateStoppedState()
+    }
+  })
 }
 
 document.addEventListener('keydown', (e) => {
   try {
     switch (e.key) {
-      case 's':
-        currentState.stopped = !currentState.stopped
-        updateStoppedState()
-        break
-      case 'r':
-        initGame()
-        break
       case 'ArrowUp': {
         if (currentState.stopped) return
         updateBlock({

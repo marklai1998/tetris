@@ -98,7 +98,3 @@ h4 {
   content: ' ';
   white-space: pre;
 }
-
-#stop.active {
-  color: #f44336;
-}
