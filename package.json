@@ -19,6 +19,6 @@
     "vite": "2.9.9"
   },
   "dependencies": {
-    "classnames": "^2.3.1"
+    "classnames": "2.3.1"
   }
 }
