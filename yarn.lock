@@ -222,10 +222,10 @@
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.7.4.tgz"
   "version" "4.7.4"
 
-"vite@2.9.9":
-  "integrity" "sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew=="
-  "resolved" "https://registry.npmjs.org/vite/-/vite-2.9.9.tgz"
-  "version" "2.9.9"
+"vite@2.9.12":
+  "integrity" "sha512-suxC36dQo9Rq1qMB2qiRorNJtJAdxguu5TMvBHOc/F370KvqAe9t48vYp+/TbPKRNrMh/J55tOUmkuIqstZaew=="
+  "resolved" "https://registry.npmjs.org/vite/-/vite-2.9.12.tgz"
+  "version" "2.9.12"
   dependencies:
     "esbuild" "^0.14.27"
     "postcss" "^8.4.13"
