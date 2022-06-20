@@ -1,7 +1,7 @@
 import { createElement } from '../jsxRuntime/jsxRuntime'
 /** @jsx createElement */
 import { Grid } from '../types/grid'
-import { Component } from './Component'
+import { Component } from '../jsxRuntime/Component'
 
 const css = `
   .container {

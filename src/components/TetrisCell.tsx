@@ -1,6 +1,6 @@
 import { createElement } from '../jsxRuntime/jsxRuntime'
 /** @jsx createElement */
-import { Component } from './Component'
+import { Component } from '../jsxRuntime/Component'
 import classnames from 'classnames'
 
 const css = `
