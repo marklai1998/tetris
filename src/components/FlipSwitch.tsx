@@ -3,6 +3,12 @@ import { createElement } from '../jsxRuntime/jsxRuntime'
 import { Component } from '../jsxRuntime/Component'
 import classnames from 'classnames'
 
+const css = `
+  .active {
+    color: #f44336;
+  }
+`
+
 export class FlipSwitch extends Component<{}, { key: string; active: string }> {
   handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === this.props.key?.toLowerCase()) {
@@ -22,11 +28,7 @@ export class FlipSwitch extends Component<{}, { key: string; active: string }> {
 
   render() {
     const { key, active } = this.props
-    const css = `
-      .active {
-        color: #f44336;
-      }
-    `
+
     return (
       <div>
         <style>{css}</style>
