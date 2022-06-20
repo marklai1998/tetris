@@ -1,3 +1,5 @@
+import { createElement } from './jsxRuntime/jsxRuntime'
+/** @jsx createElement */
 import { blocks } from './constants/blockMap'
 import { observe } from './utils/observe'
 import './index.css'
@@ -7,8 +9,8 @@ import { BlockState, State } from './types/state'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { removeCompleteLine } from './utils/removeCompleteLine'
 import './components'
-import { TetrisGrid } from './components/TetrisGrid'
 import { Grid } from './types/grid'
+import './jsxRuntime/jsxRuntime'
 
 const getBlock = (): BlockState => {
   const keys = Object.keys(blocks) as (keyof typeof blocks)[]
@@ -29,11 +31,12 @@ const getObservedState = (): State => {
         case 'block': {
           const playArea = document.querySelector('#grid')
           if (!playArea) return
-          const gridEle = new TetrisGrid(grid)
           const displayGrid = drawBlockToGrid({ grid, block })
 
           playArea.innerHTML = ''
-          gridEle.grid = displayGrid
+          const gridEle = (
+            <tetris-grid grid={JSON.stringify(displayGrid)}></tetris-grid>
+          )
           playArea.appendChild(gridEle)
           break
         }
@@ -60,7 +63,7 @@ const getObservedState = (): State => {
   )
 }
 
-let clock: number | undefined
+let clock: NodeJS.Timer | undefined
 let currentState = getObservedState()
 
 const updateBlock = (update: Partial<BlockState>) => {

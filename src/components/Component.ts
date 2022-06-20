@@ -1,16 +1,15 @@
-export class Component<S extends Record<string, unknown>> extends HTMLElement {
+export class Component<
+  S extends Record<string, unknown>,
+  P extends Record<string, unknown>
+> extends HTMLElement {
   shadow = this.attachShadow({ mode: 'open' })
-  state = {} as S
+  state: S = {} as S
 
-  constructor() {
-    super()
-  }
-
-  get props() {
+  get props(): P {
     const nameList = this.getAttributeNames()
     return Object.fromEntries(
       nameList.map((key) => [key, this.getAttribute(key)])
-    )
+    ) as P
   }
 
   attributeChangedCallback(name: string, oldValue: unknown, newValue: unknown) {
@@ -21,6 +20,17 @@ export class Component<S extends Record<string, unknown>> extends HTMLElement {
   connectedCallback() {
     this.onMount()
     this.rerender()
+
+    var observer = new MutationObserver((mutations) => {
+      const attributeChanges = mutations.some(
+        ({ type }) => type === 'attributes'
+      )
+      if (attributeChanges) this.rerender()
+    })
+
+    observer.observe(this, {
+      attributes: true, //configure it to listen to attribute changes
+    })
   }
 
   disconnectedCallback() {
@@ -29,7 +39,8 @@ export class Component<S extends Record<string, unknown>> extends HTMLElement {
 
   rerender() {
     const result = this.render()
-    this.shadow.innerHTML = result
+    this.shadow.innerHTML = ''
+    if (result) this.shadow.appendChild(result)
   }
 
   setState(newState: Partial<S>) {
@@ -40,7 +51,7 @@ export class Component<S extends Record<string, unknown>> extends HTMLElement {
   onPropsChange(name: string, oldValue: unknown, newValue: unknown) {}
   onMount() {}
   onUnmount() {}
-  render(): string {
-    return ''
+  render(): HTMLElement | null {
+    return null
   }
 }

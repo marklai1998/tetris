@@ -13,7 +13,11 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "preserve",
+    "paths": {
+      "jsxRuntime": ["./src/jsxRuntime/jsxRuntime.ts"]
+    }
   },
   "include": ["src"]
 }
