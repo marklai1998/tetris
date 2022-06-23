@@ -9,8 +9,7 @@ export type BlockState = {
 }
 
 export type State = {
-  solidGrid: Grid
-  displayGrid: Grid
+  grid: Grid
   block: BlockState
   stopped: boolean
   score: number

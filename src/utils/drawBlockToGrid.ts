@@ -7,9 +7,11 @@ import { cloneGrid } from './cloneArray'
 export const drawBlockToGrid = ({
   grid,
   block: { x, y, blockCode, rotation },
+  override = false,
 }: {
   grid: Grid
   block: BlockState
+  override?: boolean
 }) => {
   const block = blocks[blockCode]
   const clonedGrid = cloneGrid(grid)
@@ -30,7 +32,7 @@ export const drawBlockToGrid = ({
         throw new Error('OUT_OF_BOUND')
       }
 
-      if (clonedGrid?.[targetY]?.[targetX]) {
+      if (clonedGrid?.[targetY]?.[targetX] && !override) {
         throw new Error('OVERLAP_VALUE')
       }
 

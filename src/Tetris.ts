@@ -17,15 +17,8 @@ export class Tetris {
   }
 
   set state(v) {
-    const newState = {
-      ...v,
-      displayGrid: drawBlockToGrid({
-        grid: v.solidGrid,
-        block: v.block,
-      }),
-    }
-    this._state = newState
-    this.onSateChangeCb(newState)
+    this._state = v
+    this.onSateChangeCb(v)
   }
 
   constructor({
@@ -42,7 +35,7 @@ export class Tetris {
   updateBlock = (update: Partial<BlockState>) => {
     try {
       const newState = { ...this.state.block, ...update }
-      drawBlockToGrid({ grid: this.state.solidGrid, block: newState })
+      drawBlockToGrid({ grid: this.state.grid, block: newState })
       this.state = { ...this.state, block: newState }
       return true
     } catch (e) {
@@ -53,22 +46,21 @@ export class Tetris {
   tick = () => {
     this.state = { ...this.state, score: this.state.score + 1 }
     if (this.updateBlock({ y: this.state.block.y + 1 })) return
-
     // Landed
-    const { solidGrid, block } = this.state
+    const { grid, block } = this.state
     const { grid: newGrid, removedLine } = removeCompleteLine(
-      drawBlockToGrid({ grid: solidGrid, block })
+      drawBlockToGrid({ grid, block })
     )
 
-    if (this.updateBlock(getBlock())) {
-      this.state = {
-        ...this.state,
-        score: this.state.score + removedLine * 100,
-        solidGrid: newGrid,
-      }
-    } else {
+    this.state = {
+      ...this.state,
+      score: this.state.score + removedLine * 100,
+      grid: newGrid,
+    }
+
+    if (!this.updateBlock(getBlock())) {
       // End Game
-      this.state = getInitialState()
+      this.reset()
     }
   }
 

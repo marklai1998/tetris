@@ -7,6 +7,7 @@ import { State as TetrisState } from './types/state'
 import { getInitialState } from './utils/getInitialState'
 import './index.css'
 import './components'
+import { drawBlockToGrid } from './utils/drawBlockToGrid'
 
 const css = `
   h1 {
@@ -85,6 +86,11 @@ class App extends Component<State, {}> {
 
   render() {
     const { tetrisState } = this.state
+    const displayGrid = drawBlockToGrid({
+      grid: tetrisState.grid,
+      block: tetrisState.block,
+      override: true,
+    })
     return (
       <div id='app'>
         <style>{css}</style>
@@ -93,9 +99,7 @@ class App extends Component<State, {}> {
         </div>
         <div class='row'>
           <div>
-            <tetris-grid
-              grid={JSON.stringify(this.state.tetrisState.displayGrid)}
-            ></tetris-grid>
+            <tetris-grid grid={JSON.stringify(displayGrid)}></tetris-grid>
           </div>
           <div class='control'>
             <h3>Score</h3>
