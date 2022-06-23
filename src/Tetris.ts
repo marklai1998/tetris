@@ -1,23 +1,11 @@
 import { Action } from './constants/action'
 import { config } from './constants/config'
-import { getGrid } from './utils/getGrid'
 
 import { getBlock } from './utils/getBlock'
 import { BlockState, State } from './types/state'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
 import { removeCompleteLine } from './utils/removeCompleteLine'
-
-const getInitialState = () => {
-  const block = getBlock()
-  const grid = getGrid(config.gridSize)
-  return {
-    block,
-    solidGrid: grid,
-    displayGrid: drawBlockToGrid({ block, grid }),
-    stopped: true,
-    score: 0,
-  }
-}
+import { getInitialState } from './utils/getInitialState'
 
 export class Tetris {
   clock: NodeJS.Timer | undefined
@@ -40,9 +28,15 @@ export class Tetris {
     this.onSateChangeCb(newState)
   }
 
-  constructor({ onSateChange }: { onSateChange: (newState: State) => void }) {
+  constructor({
+    onSateChange,
+    initialState,
+  }: {
+    onSateChange: (newState: State) => void
+    initialState: State
+  }) {
+    this.state = initialState
     this.onSateChangeCb = onSateChange
-    onSateChange(this._state)
   }
 
   updateBlock = (update: Partial<BlockState>) => {
@@ -130,5 +124,7 @@ export class Tetris {
 
   reset = () => {
     this.state = getInitialState()
+    clearInterval(this.clock)
+    this.clock = undefined
   }
 }

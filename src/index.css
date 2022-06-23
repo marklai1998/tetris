@@ -3,24 +3,3 @@ body {
   color: #5c5c5c;
   font-family: 'Rajdhani', sans-serif;
 }
-
-h1 {
-  display: inline-block;
-}
-
-h4 {
-  display: inline-block;
-}
-
-.row {
-  display: flex;
-  justify-content: center;
-}
-
-.header {
-  margin: 50px 0;
-}
-
-.control {
-  margin-left: 16px;
-}

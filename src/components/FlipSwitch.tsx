@@ -22,7 +22,7 @@ export class FlipSwitch extends Component<{}, { key: string; active: string }> {
     window.addEventListener('keydown', this.handleKeyDown)
   }
 
-  onUmount() {
+  onUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
