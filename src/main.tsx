@@ -22,6 +22,10 @@ const css = `
     justify-content: center;
   }
 
+  .score{
+    margin-bottom: 16px;
+  }
+
   .header {
     margin: 50px 0;
   }
@@ -95,18 +99,32 @@ class App extends Component<State, {}> {
           </div>
           <div class='control'>
             <h3>Score</h3>
-            <div id='score'>{tetrisState.score}</div>
-            <h3>Help</h3>
+            <div class='score'>{tetrisState.score}</div>
             <flip-switch
-              id='stop'
               key='S'
               active={tetrisState.stopped ? 'true' : 'false'}
               onChange={this.handleStartStop}
             >
               Start/Stop
             </flip-switch>
-            <flip-switch id='restart' key='R' onChange={this.handleRestart}>
+            <flip-switch key='R' onChange={this.handleRestart}>
               Restart
+            </flip-switch>
+            <h3>Help</h3>
+            <flip-switch key='←' disabled='true'>
+              Left
+            </flip-switch>
+            <flip-switch key='↑' disabled='true'>
+              Rotate
+            </flip-switch>
+            <flip-switch key='→' disabled='true'>
+              Right
+            </flip-switch>
+            <flip-switch key='↓' disabled='true'>
+              Down
+            </flip-switch>
+            <flip-switch key='space' disabled='true'>
+              Drop to bottom
             </flip-switch>
           </div>
         </div>

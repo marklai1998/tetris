@@ -9,7 +9,10 @@ const css = `
   }
 `
 
-export class FlipSwitch extends Component<{}, { key: string; active: string }> {
+export class FlipSwitch extends Component<
+  {},
+  { key: string; active: string; disabled: string }
+> {
   handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === this.props.key?.toLowerCase()) {
       const newState = !(this.props.active === 'true')
@@ -19,7 +22,8 @@ export class FlipSwitch extends Component<{}, { key: string; active: string }> {
   }
 
   onMount() {
-    window.addEventListener('keydown', this.handleKeyDown)
+    if (this.props.disabled !== 'false')
+      window.addEventListener('keydown', this.handleKeyDown)
   }
 
   onUnmount() {
