@@ -63,7 +63,6 @@ class App extends Component<{}, {}> {
   }
 
   handleRestart = () => {
-    console.log('hi')
     this.state.tetris.reset()
   }
 

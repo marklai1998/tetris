@@ -1,9 +1,12 @@
+import { shallowCompare } from '../utils/shallowCompare'
+
 export class Component<
   S extends Record<string, unknown>,
   P extends Record<string, unknown>
 > extends HTMLElement {
   shadow = this.attachShadow({ mode: 'open' })
   state: S = {} as S
+  savedProps = { ...this.props }
 
   get props(): P {
     const nameList = this.getAttributeNames()
@@ -25,7 +28,13 @@ export class Component<
       const attributeChanges = mutations.some(
         ({ type }) => type === 'attributes'
       )
-      if (attributeChanges) this.rerender()
+      if (attributeChanges) {
+        const currentProps = this.props
+        if (!shallowCompare(currentProps, this.props)) {
+          this.rerender()
+        }
+        this.savedProps = { ...currentProps }
+      }
     })
 
     observer.observe(this, {
