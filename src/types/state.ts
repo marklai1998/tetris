@@ -14,4 +14,6 @@ export type State = {
   nextBlock: BlockState
   stopped: boolean
   score: number
+  savedBlock: keyof typeof blocks | null
+  alreadySaved: boolean
 }

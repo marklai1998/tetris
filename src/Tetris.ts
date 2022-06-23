@@ -43,6 +43,18 @@ export class Tetris {
     }
   }
 
+  nextBlock = () => {
+    if (!this.updateBlock(this.state.nextBlock)) {
+      // End Game
+      this.reset()
+    } else {
+      this.state = {
+        ...this.state,
+        nextBlock: getBlock(),
+      }
+    }
+  }
+
   tick = () => {
     this.state = { ...this.state, score: this.state.score + 1 }
     if (this.updateBlock({ y: this.state.block.y + 1 })) return
@@ -56,17 +68,10 @@ export class Tetris {
       ...this.state,
       score: this.state.score + removedLine * 100,
       grid: newGrid,
+      alreadySaved: false,
     }
 
-    if (!this.updateBlock(this.state.nextBlock)) {
-      // End Game
-      this.reset()
-    } else {
-      this.state = {
-        ...this.state,
-        nextBlock: getBlock(),
-      }
-    }
+    this.nextBlock()
   }
 
   resetClockTick = () => {
@@ -123,5 +128,24 @@ export class Tetris {
     this.state = getInitialState()
     clearInterval(this.clock)
     this.clock = undefined
+  }
+
+  save = () => {
+    if (this.state.alreadySaved) return
+    if (this.state.savedBlock) {
+      this.state = {
+        ...this.state,
+        block: { ...getBlock(), blockCode: this.state.savedBlock },
+        savedBlock: this.state.block.blockCode,
+        alreadySaved: true,
+      }
+    } else {
+      this.state = {
+        ...this.state,
+        savedBlock: this.state.block.blockCode,
+        alreadySaved: true,
+      }
+      this.nextBlock()
+    }
   }
 }

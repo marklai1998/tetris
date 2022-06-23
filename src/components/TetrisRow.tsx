@@ -4,21 +4,16 @@ import { Component } from '../jsxRuntime/Component'
 
 const style = `
   .row {
-    line-height: 25px;
     display: flex;
   }
 `
 
-export class TetrisRow extends Component<{}, { last: string }> {
+export class TetrisRow extends Component<{}, {}> {
   render() {
-    const { last } = this.props
-
     return (
       <div>
         <style>{style}</style>
-        <div class='row'>
-          [{this.children}] {last === 'true' ? ']' : ','}
-        </div>
+        <div class='row'>[{this.children}]</div>
       </div>
     )
   }

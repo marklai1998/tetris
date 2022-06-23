@@ -19,6 +19,11 @@ const css = `
   h4 {
     display: inline-block;
   }
+  
+  h3 {  
+    margin: 16px 0 8px 0;
+  }
+  
 
   .row {
     display: flex;
@@ -90,6 +95,10 @@ class App extends Component<State, {}> {
       : this.state.tetris?.stop()
   }
 
+  handleSave = () => {
+    this.state.tetris?.save()
+  }
+
   render() {
     const { tetrisState } = this.state
     const displayGrid = drawBlockToGrid({
@@ -101,6 +110,9 @@ class App extends Component<State, {}> {
       blocks[tetrisState.nextBlock.blockCode],
       2
     )
+    const savedBlockData = tetrisState.savedBlock
+      ? rotateMatrix(blocks[tetrisState.savedBlock], 2)
+      : [[]]
     return (
       <div id='app'>
         <style>{css}</style>
@@ -119,9 +131,14 @@ class App extends Component<State, {}> {
               grid={JSON.stringify(nextBlockData)}
               name='next'
             ></tetris-grid>
+            <tetris-grid
+              grid={JSON.stringify(savedBlockData)}
+              name='saved'
+            ></tetris-grid>
             <div>
               <h3>Score</h3>
               <div class='score'>{tetrisState.score}</div>
+              <h3>Help</h3>
               <flip-switch
                 key='S'
                 active={tetrisState.stopped ? 'true' : 'false'}
@@ -132,7 +149,6 @@ class App extends Component<State, {}> {
               <flip-switch key='R' onChange={this.handleRestart}>
                 Restart
               </flip-switch>
-              <h3>Help</h3>
               <flip-switch key='←' disabled='true'>
                 Left
               </flip-switch>
@@ -147,6 +163,13 @@ class App extends Component<State, {}> {
               </flip-switch>
               <flip-switch key='space' disabled='true'>
                 Drop to bottom
+              </flip-switch>
+              <flip-switch
+                key='C'
+                onChange={this.handleSave}
+                active={tetrisState.alreadySaved ? 'true' : 'false'}
+              >
+                Save Block
               </flip-switch>
             </div>
           </div>
