@@ -96,7 +96,7 @@ class App extends Component<State, {}> {
   }
 
   handleSave = () => {
-    this.state.tetris?.save()
+    this.state.tetris?.move(Action.SAVE)
   }
 
   render() {

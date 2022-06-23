@@ -4,4 +4,5 @@ export enum Action {
   ROTATE = 'ROTATE',
   DOWN = 'DOWN',
   DROP = 'DROP',
+  SAVE = 'SAVE',
 }

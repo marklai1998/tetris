@@ -110,6 +110,24 @@ export class Tetris {
         this.tick()
         break
       }
+      case Action.SAVE: {
+        if (this.state.alreadySaved) return
+        if (this.state.savedBlock) {
+          this.state = {
+            ...this.state,
+            block: { ...getBlock(), blockCode: this.state.savedBlock },
+            savedBlock: this.state.block.blockCode,
+            alreadySaved: true,
+          }
+        } else {
+          this.state = {
+            ...this.state,
+            savedBlock: this.state.block.blockCode,
+            alreadySaved: true,
+          }
+          this.nextBlock()
+        }
+      }
     }
   }
 
@@ -128,24 +146,5 @@ export class Tetris {
     this.state = getInitialState()
     clearInterval(this.clock)
     this.clock = undefined
-  }
-
-  save = () => {
-    if (this.state.alreadySaved) return
-    if (this.state.savedBlock) {
-      this.state = {
-        ...this.state,
-        block: { ...getBlock(), blockCode: this.state.savedBlock },
-        savedBlock: this.state.block.blockCode,
-        alreadySaved: true,
-      }
-    } else {
-      this.state = {
-        ...this.state,
-        savedBlock: this.state.block.blockCode,
-        alreadySaved: true,
-      }
-      this.nextBlock()
-    }
   }
 }
