@@ -11,6 +11,7 @@ export type BlockState = {
 export type State = {
   grid: Grid
   block: BlockState
+  nextBlock: BlockState
   stopped: boolean
   score: number
 }

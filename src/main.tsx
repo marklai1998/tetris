@@ -8,6 +8,8 @@ import { getInitialState } from './utils/getInitialState'
 import './index.css'
 import './components'
 import { drawBlockToGrid } from './utils/drawBlockToGrid'
+import { blocks } from './constants/blockMap'
+import { rotateMatrix } from './utils/rotateMatrix'
 
 const css = `
   h1 {
@@ -33,6 +35,10 @@ const css = `
 
   .control {
     margin-left: 16px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 `
 
@@ -91,6 +97,10 @@ class App extends Component<State, {}> {
       block: tetrisState.block,
       override: true,
     })
+    const nextBlockData = rotateMatrix(
+      blocks[tetrisState.nextBlock.blockCode],
+      2
+    )
     return (
       <div id='app'>
         <style>{css}</style>
@@ -99,37 +109,46 @@ class App extends Component<State, {}> {
         </div>
         <div class='row'>
           <div>
-            <tetris-grid grid={JSON.stringify(displayGrid)}></tetris-grid>
+            <tetris-grid
+              grid={JSON.stringify(displayGrid)}
+              name='grid'
+            ></tetris-grid>
           </div>
           <div class='control'>
-            <h3>Score</h3>
-            <div class='score'>{tetrisState.score}</div>
-            <flip-switch
-              key='S'
-              active={tetrisState.stopped ? 'true' : 'false'}
-              onChange={this.handleStartStop}
-            >
-              Start/Stop
-            </flip-switch>
-            <flip-switch key='R' onChange={this.handleRestart}>
-              Restart
-            </flip-switch>
-            <h3>Help</h3>
-            <flip-switch key='←' disabled='true'>
-              Left
-            </flip-switch>
-            <flip-switch key='↑' disabled='true'>
-              Rotate
-            </flip-switch>
-            <flip-switch key='→' disabled='true'>
-              Right
-            </flip-switch>
-            <flip-switch key='↓' disabled='true'>
-              Down
-            </flip-switch>
-            <flip-switch key='space' disabled='true'>
-              Drop to bottom
-            </flip-switch>
+            <tetris-grid
+              grid={JSON.stringify(nextBlockData)}
+              name='next'
+            ></tetris-grid>
+            <div>
+              <h3>Score</h3>
+              <div class='score'>{tetrisState.score}</div>
+              <flip-switch
+                key='S'
+                active={tetrisState.stopped ? 'true' : 'false'}
+                onChange={this.handleStartStop}
+              >
+                Start/Stop
+              </flip-switch>
+              <flip-switch key='R' onChange={this.handleRestart}>
+                Restart
+              </flip-switch>
+              <h3>Help</h3>
+              <flip-switch key='←' disabled='true'>
+                Left
+              </flip-switch>
+              <flip-switch key='↑' disabled='true'>
+                Rotate
+              </flip-switch>
+              <flip-switch key='→' disabled='true'>
+                Right
+              </flip-switch>
+              <flip-switch key='↓' disabled='true'>
+                Down
+              </flip-switch>
+              <flip-switch key='space' disabled='true'>
+                Drop to bottom
+              </flip-switch>
+            </div>
           </div>
         </div>
       </div>

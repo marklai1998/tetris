@@ -58,9 +58,14 @@ export class Tetris {
       grid: newGrid,
     }
 
-    if (!this.updateBlock(getBlock())) {
+    if (!this.updateBlock(this.state.nextBlock)) {
       // End Game
       this.reset()
+    } else {
+      this.state = {
+        ...this.state,
+        nextBlock: getBlock(),
+      }
     }
   }
 

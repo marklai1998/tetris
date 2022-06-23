@@ -4,6 +4,7 @@ import { getGrid } from './getGrid'
 
 export const getInitialState = () => ({
   block: getBlock(),
+  nextBlock: getBlock(),
   grid: getGrid(config.gridSize),
   stopped: true,
   score: 0,

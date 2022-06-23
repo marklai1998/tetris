@@ -18,15 +18,15 @@ const css = `
   }
 `
 
-export class TetrisGrid extends Component<{}, { grid: string }> {
+export class TetrisGrid extends Component<{}, { grid: string; name: string }> {
   render() {
-    const { grid } = this.props
+    const { grid, name } = this.props
 
     return (
       <div id='test'>
         <style>{css}</style>
         <div class='container'>
-          <div class='grid-start'>var grid = [&nbsp;</div>
+          <div class='grid-start'>var {name} = [&nbsp;</div>
           <div>
             {(JSON.parse(grid) as Grid).map((row, rowIdx) => (
               <tetris-row>
