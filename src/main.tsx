@@ -2,11 +2,11 @@ import { createElement } from './jsxRuntime/jsxRuntime'
 /** @jsx createElement */
 import { Action } from './constants/action'
 import { Tetris } from './Tetris'
+import { Component } from './jsxRuntime/Component'
+import { State as TetrisState } from './types/state'
+import { getInitialState } from './utils/getInitialState'
 import './index.css'
 import './components'
-import { Component } from './jsxRuntime/Component'
-import { State } from './types/state'
-import { getInitialState } from './utils/getInitialState'
 
 const css = `
   h1 {
@@ -31,45 +31,52 @@ const css = `
   }
 `
 
-class App extends Component<{}, {}> {
-  handleStateChange = (newState: State) => {
-    this.setState({ tetrisState: newState })
-  }
+type State = { tetris: Tetris | null; tetrisState: TetrisState }
 
-  initialState = getInitialState()
-  state = {
-    tetris: new Tetris({
-      onSateChange: this.handleStateChange,
-      initialState: this.initialState,
-    }),
-    tetrisState: this.initialState,
+class App extends Component<State, {}> {
+  state: State = {
+    tetris: null,
+    tetrisState: getInitialState(),
   }
 
   onMount() {
+    const initialState = getInitialState()
+    this.setState({
+      tetris: new Tetris({
+        onSateChange: (newState) => {
+          this.setState({ tetrisState: newState })
+        },
+        initialState: initialState,
+      }),
+      tetrisState: initialState,
+    })
+
     document.addEventListener('keydown', (e) => {
+      const { tetris } = this.state
+      if (!tetris) return
       switch (e.key) {
         case 'ArrowLeft':
-          return this.state.tetris.move(Action.LEFT)
+          return tetris.move(Action.LEFT)
         case 'ArrowRight':
-          return this.state.tetris.move(Action.RIGHT)
+          return tetris.move(Action.RIGHT)
         case 'ArrowDown':
-          return this.state.tetris.move(Action.DOWN)
+          return tetris.move(Action.DOWN)
         case 'ArrowUp':
-          return this.state.tetris.move(Action.ROTATE)
+          return tetris.move(Action.ROTATE)
         case ' ':
-          return this.state.tetris.move(Action.DROP)
+          return tetris.move(Action.DROP)
       }
     })
   }
 
   handleRestart = () => {
-    this.state.tetris.reset()
+    this.state.tetris?.reset()
   }
 
   handleStartStop = () => {
     this.state.tetrisState.stopped
-      ? this.state.tetris.start()
-      : this.state.tetris.stop()
+      ? this.state.tetris?.start()
+      : this.state.tetris?.stop()
   }
 
   render() {
