@@ -13,7 +13,7 @@
   "license": "ISC",
   "homepage": "https://github.com/marklai1998/tetris#readme",
   "devDependencies": {
-    "@types/node": "18.0.0",
+    "@types/node": "18.11.5",
     "precompress": "7.0.1",
     "prettier": "2.7.1",
     "typescript": "4.8.4",
