@@ -17,7 +17,7 @@
     "precompress": "10.0.2",
     "prettier": "2.8.7",
     "typescript": "4.9.5",
-    "vite": "3.2.5"
+    "vite": "3.2.6"
   },
   "dependencies": {
     "classnames": "2.3.2"
