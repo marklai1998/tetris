@@ -57,7 +57,7 @@ export class Component<
     this.rerender()
   }
 
-  onPropsChange(name: string, oldValue: unknown, newValue: unknown) {}
+  onPropsChange(_name: string, _oldValue: unknown, _newValue: unknown) {}
   onMount() {}
   onUnmount() {}
   render(): HTMLElement | null {

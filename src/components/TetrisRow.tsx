@@ -1,5 +1,5 @@
-import { createElement } from '../jsxRuntime/jsxRuntime'
 /** @jsx createElement */
+import { createElement } from '../jsxRuntime/jsxRuntime'
 import { Component } from '../jsxRuntime/Component'
 
 const style = `
@@ -9,7 +9,7 @@ const style = `
 `
 
 export class TetrisRow extends Component<{}, {}> {
-  render() {
+  override render() {
     return (
       <div>
         <style>{style}</style>

@@ -1,5 +1,5 @@
-import { createElement } from '../jsxRuntime/jsxRuntime'
 /** @jsx createElement */
+import { createElement } from '../jsxRuntime/jsxRuntime'
 import { Grid } from '../types/grid'
 import { Component } from '../jsxRuntime/Component'
 
@@ -30,7 +30,7 @@ const css = `
 `
 
 export class TetrisGrid extends Component<{}, { grid: string; name: string }> {
-  render() {
+  override render() {
     const { grid, name } = this.props
     const parsedGrid = JSON.parse(grid) as Grid
     return (

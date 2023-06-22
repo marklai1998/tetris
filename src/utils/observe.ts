@@ -2,7 +2,7 @@ export const observe = <T extends Record<string, unknown>>(
   state: T,
   onChange: (prop: keyof T, newObj: T) => void
 ) => {
-  Object.entries(state).forEach(([prop, value]) => {
+  Object.entries(state).forEach(([prop, _]) => {
     onChange(prop, state)
   })
   return new Proxy(state, {

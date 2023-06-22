@@ -1,5 +1,5 @@
-import { createElement } from '../jsxRuntime/jsxRuntime'
 /** @jsx createElement */
+import { createElement } from '../jsxRuntime/jsxRuntime'
 import { Component } from '../jsxRuntime/Component'
 import classnames from 'classnames'
 
@@ -21,16 +21,16 @@ export class FlipSwitch extends Component<
     }
   }
 
-  onMount() {
+  override onMount() {
     if (this.props.disabled !== 'false')
       window.addEventListener('keydown', this.handleKeyDown)
   }
 
-  onUnmount() {
+  override onUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  render() {
+  override render() {
     const { key, active } = this.props
 
     return (

@@ -1,5 +1,5 @@
-import { createElement } from '../jsxRuntime/jsxRuntime'
 /** @jsx createElement */
+import { createElement } from '../jsxRuntime/jsxRuntime'
 import { Component } from '../jsxRuntime/Component'
 import classnames from 'classnames'
 
@@ -49,7 +49,7 @@ const css = `
 `
 
 export class TetrisCell extends Component<{}, { val: string }> {
-  render() {
+  override render() {
     const { val } = this.props
 
     return (

@@ -129,6 +129,7 @@ export class Tetris {
         }
       }
     }
+    return
   }
 
   start = () => {

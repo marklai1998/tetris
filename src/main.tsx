@@ -1,5 +1,5 @@
-import { createElement } from './jsxRuntime/jsxRuntime'
 /** @jsx createElement */
+import { createElement } from './jsxRuntime/jsxRuntime'
 import { Action } from './constants/action'
 import { Tetris } from './Tetris'
 import { Component } from './jsxRuntime/Component'
@@ -50,12 +50,12 @@ const css = `
 type State = { tetris: Tetris | null; tetrisState: TetrisState }
 
 class App extends Component<State, {}> {
-  state: State = {
+  override state: State = {
     tetris: null,
     tetrisState: getInitialState(),
   }
 
-  onMount() {
+  override onMount() {
     const initialState = getInitialState()
     this.setState({
       tetris: new Tetris({
@@ -82,6 +82,7 @@ class App extends Component<State, {}> {
         case ' ':
           return tetris.move(Action.DROP)
       }
+      return
     })
   }
 
@@ -99,7 +100,7 @@ class App extends Component<State, {}> {
     this.state.tetris?.move(Action.SAVE)
   }
 
-  render() {
+  override render() {
     const { tetrisState } = this.state
     const displayGrid = drawBlockToGrid({
       grid: tetrisState.grid,
