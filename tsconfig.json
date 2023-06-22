@@ -26,5 +26,5 @@
       "jsxRuntime": ["./src/jsxRuntime/jsxRuntime.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }
