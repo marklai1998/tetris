@@ -14,8 +14,8 @@ devDependencies:
     specifier: 20.4.1
     version: 20.4.1
   precompress:
-    specifier: 11.2.1
-    version: 11.2.1
+    specifier: 11.2.2
+    version: 11.2.2
   prettier:
     specifier: 3.0.0
     version: 3.0.0
@@ -291,8 +291,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /precompress@11.2.1:
-    resolution: {integrity: sha512-OBBz3fUf2DycCefY0bkMptr7sjjRWIKIJlc/8ppbBBJbhHL3mw2WfZV2XL7xtwgdFpWWdNkkfdmczHOfI8jHgQ==}
+  /precompress@11.2.2:
+    resolution: {integrity: sha512-TtcqMf2kBgx6tvmhh4jdNXCIqUpwBGaRMhwkYdLCMyLhdRaMPbuc1qerkhrT6fF2mKEvem1wbmPBwP/6hl0pCQ==}
     engines: {node: '>=16'}
     hasBin: true
     dev: true
