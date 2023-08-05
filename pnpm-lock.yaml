@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@types/node':
-    specifier: 20.4.7
-    version: 20.4.7
+    specifier: 20.4.8
+    version: 20.4.8
   precompress:
     specifier: 11.2.2
     version: 11.2.2
@@ -24,7 +24,7 @@ devDependencies:
     version: 5.1.6
   vite:
     specifier: 4.4.8
-    version: 4.4.8(@types/node@20.4.7)
+    version: 4.4.8(@types/node@20.4.8)
 
 packages:
 
@@ -226,8 +226,8 @@ packages:
     dev: true
     optional: true
 
-  /@types/node@20.4.7:
-    resolution: {integrity: sha512-bUBrPjEry2QUTsnuEjzjbS7voGWCc30W0qzgMf90GPeDGFRakvrz47ju+oqDAKCXLUCe39u57/ORMl/O/04/9g==}
+  /@types/node@20.4.8:
+    resolution: {integrity: sha512-0mHckf6D2DiIAzh8fM8f3HQCvMKDpK94YQ0DSVkfWTG9BZleYIWudw9cJxX8oCk9bM+vAkDyujDV6dmKHbvQpg==}
     dev: true
 
   /classnames@2.3.2:
@@ -322,7 +322,7 @@ packages:
     hasBin: true
     dev: true
 
-  /vite@4.4.8(@types/node@20.4.7):
+  /vite@4.4.8(@types/node@20.4.8):
     resolution: {integrity: sha512-LONawOUUjxQridNWGQlNizfKH89qPigK36XhMI7COMGztz8KNY0JHim7/xDd71CZwGT4HtSRgI7Hy+RlhG0Gvg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -350,7 +350,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.4.7
+      '@types/node': 20.4.8
       esbuild: 0.18.11
       postcss: 8.4.26
       rollup: 3.26.2
