@@ -17,7 +17,7 @@
   "homepage": "https://github.com/marklai1998/tetris#readme",
   "devDependencies": {
     "@types/node": "20.4.10",
-    "precompress": "11.2.2",
+    "precompress": "12.0.0",
     "prettier": "3.0.2",
     "typescript": "5.1.6",
     "vite": "4.4.9"
