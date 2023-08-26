@@ -8,7 +8,7 @@ import { removeCompleteLine } from './utils/removeCompleteLine'
 import { getInitialState } from './utils/getInitialState'
 
 export class Tetris {
-  clock: NodeJS.Timer | undefined
+  clock: NodeJS.Timeout | undefined
   _state = getInitialState()
   onSateChangeCb: (newState: State) => void = () => {}
 
