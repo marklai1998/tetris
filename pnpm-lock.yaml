@@ -13,9 +13,6 @@ devDependencies:
   '@types/node':
     specifier: 20.5.6
     version: 20.5.6
-  precompress:
-    specifier: 12.0.0
-    version: 12.0.0
   prettier:
     specifier: 3.0.2
     version: 3.0.2
@@ -289,12 +286,6 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: true
-
-  /precompress@12.0.0:
-    resolution: {integrity: sha512-AKcrco3a74S4ipmsP+eBXi2akERlH4RxSJa2v2wbgXkWqi8jEW+SVkkvYq63EnCBMnarH8H/Oe3nI79BUFrrSQ==}
-    engines: {node: '>=18'}
-    hasBin: true
     dev: true
 
   /prettier@3.0.2:
