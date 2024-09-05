@@ -15,7 +15,7 @@
   "license": "ISC",
   "homepage": "https://github.com/marklai1998/tetris#readme",
   "devDependencies": {
-    "@types/node": "20.16.4",
+    "@types/node": "20.16.5",
     "prettier": "3.3.3",
     "typescript": "5.5.4",
     "vite": "5.4.3"
