@@ -16,7 +16,7 @@
   "homepage": "https://github.com/marklai1998/tetris#readme",
   "devDependencies": {
     "@types/node": "22.10.1",
-    "prettier": "3.4.1",
+    "prettier": "3.4.2",
     "typescript": "5.7.2",
     "vite": "6.0.2"
   },
