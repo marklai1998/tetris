@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@types/node':
-    specifier: 22.13.7
-    version: 22.13.7
+    specifier: 22.13.8
+    version: 22.13.8
   prettier:
     specifier: 3.5.2
     version: 3.5.2
@@ -21,7 +21,7 @@ devDependencies:
     version: 5.8.2
   vite:
     specifier: 6.2.0
-    version: 6.2.0(@types/node@22.13.7)
+    version: 6.2.0(@types/node@22.13.8)
 
 packages:
 
@@ -406,8 +406,8 @@ packages:
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
     dev: true
 
-  /@types/node@22.13.7:
-    resolution: {integrity: sha512-oU2q+BsQldB9lYxHNp/5aZO+/Bs0Usa74Abo9mAKulz4ahQyXRHK6UVKYIN8KSC8HXwhWSi7b49JnX+txuac0w==}
+  /@types/node@22.13.8:
+    resolution: {integrity: sha512-G3EfaZS+iOGYWLLRCEAXdWK9my08oHNZ+FHluRiggIYJPOXzhOiDgpVCUHaUvyIC5/fj7C/p637jdzC666AOKQ==}
     dependencies:
       undici-types: 6.20.0
     dev: true
@@ -526,7 +526,7 @@ packages:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
     dev: true
 
-  /vite@6.2.0(@types/node@22.13.7):
+  /vite@6.2.0(@types/node@22.13.8):
     resolution: {integrity: sha512-7dPxoo+WsT/64rDcwoOjk76XHj+TqNTIvHKcuMQ1k4/SeHDaQt5GFAeLYzrimZrMpn/O6DtdI03WUjdxuPM0oQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
@@ -566,7 +566,7 @@ packages:
       yaml:
         optional: true
     dependencies:
-      '@types/node': 22.13.7
+      '@types/node': 22.13.8
       esbuild: 0.25.0
       postcss: 8.5.3
       rollup: 4.34.3
