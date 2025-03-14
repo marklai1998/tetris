@@ -18,7 +18,7 @@
     "@types/node": "22.13.10",
     "prettier": "3.5.3",
     "typescript": "5.8.2",
-    "vite": "6.2.1"
+    "vite": "6.2.2"
   },
   "dependencies": {
     "classnames": "2.5.1"
